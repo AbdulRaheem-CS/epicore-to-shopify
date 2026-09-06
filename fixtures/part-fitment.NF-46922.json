@@ -1,0 +1,15 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "324736",
+      "Year": 2019,
+      "Make": "Ram",
+      "Model": "1500",
+      "SubModel": "Big Horn",
+      "EngineBase": "5.7L V8",
+      "Qualifier": null,
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 1
+}

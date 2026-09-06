@@ -1,0 +1,45 @@
+{
+  "name": "epicor-shopify-pilot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "verify": "tsx scripts/verify-setup.ts",
+    "setup:metafields": "tsx scripts/setup-metafields.ts",
+    "sync": "tsx scripts/sync.ts",
+    "sync:extract": "tsx scripts/sync.ts --only extract",
+    "sync:normalize": "tsx scripts/sync.ts --only normalize",
+    "sync:push": "tsx scripts/sync.ts --only push",
+    "prove": "tsx scripts/prove.ts",
+    "reset:pilot": "tsx scripts/reset-pilot.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.36.4",
+    "next": "^15.1.6",
+    "pg": "^8.13.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.11.10",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.28.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

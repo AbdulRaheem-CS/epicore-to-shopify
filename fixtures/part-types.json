@@ -1,0 +1,16 @@
+{
+  "Items": [
+    {
+      "PartTypeId": "111",
+      "Name": "Oil Filter"
+    },
+    {
+      "PartTypeId": "112",
+      "Name": "Air Filter"
+    },
+    {
+      "PartTypeId": "113",
+      "Name": "PCV Valve"
+    }
+  ]
+}

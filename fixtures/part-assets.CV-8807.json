@@ -1,0 +1,18 @@
+{
+  "Assets": [
+    {
+      "assetId": "CV-8807-IMG-1",
+      "assetType": "P04",
+      "url": "https://placehold.co/1200x1200/5A3A1F/FFFFFF/png?text=CV-8807+view+1",
+      "altText": "Crossvale Auto CV-8807 view 1",
+      "sequence": 1
+    },
+    {
+      "assetId": "CV-8807-IMG-2",
+      "assetType": "P01",
+      "url": "https://placehold.co/1200x1200/5A3A1F/FFFFFF/png?text=CV-8807+view+2",
+      "altText": "Crossvale Auto CV-8807 view 2",
+      "sequence": 2
+    }
+  ]
+}

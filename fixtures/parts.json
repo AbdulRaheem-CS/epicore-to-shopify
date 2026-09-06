@@ -1,0 +1,97 @@
+{
+  "TotalCount": 7,
+  "PageSize": 50,
+  "Items": [
+    {
+      "PartId": "NF-51515",
+      "PartNumber": "NF-51515",
+      "Manufacturer": "Northline Filtration",
+      "BrandId": "NORTH",
+      "LineCode": "NORTH",
+      "PartType": "Oil Filter",
+      "PartTypeDescription": "Oil Filter - NF-51515",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 4,
+      "HasImages": true
+    },
+    {
+      "PartId": "NF-51516",
+      "PartNumber": "NF-51516",
+      "Manufacturer": "Northline Filtration",
+      "BrandId": "NORTH",
+      "LineCode": "NORTH",
+      "PartType": "Oil Filter",
+      "PartTypeDescription": "Oil Filter - NF-51516",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 3,
+      "HasImages": true
+    },
+    {
+      "PartId": "NF-46921",
+      "PartNumber": "NF-46921",
+      "Manufacturer": "Northline Filtration",
+      "BrandId": "NORTH",
+      "LineCode": "NORTH",
+      "PartType": "Air Filter",
+      "PartTypeDescription": "Air Filter - NF-46921",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 4,
+      "HasImages": true
+    },
+    {
+      "PartId": "CV-2210",
+      "PartNumber": "CV-2210",
+      "Manufacturer": "Crossvale Auto",
+      "BrandId": "CRSV",
+      "LineCode": "CRSV",
+      "PartType": "Oil Filter",
+      "PartTypeDescription": "Oil Filter - CV-2210",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 3,
+      "HasImages": true
+    },
+    {
+      "PartId": "CV-8807",
+      "PartNumber": "CV-8807",
+      "Manufacturer": "Crossvale Auto",
+      "BrandId": "CRSV",
+      "LineCode": "CRSV",
+      "PartType": "PCV Valve",
+      "PartTypeDescription": "PCV Valve - CV-8807",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 2,
+      "HasImages": true
+    },
+    {
+      "PartId": "CV-8808",
+      "PartNumber": "CV-8808",
+      "Manufacturer": "Crossvale Auto",
+      "BrandId": "CRSV",
+      "LineCode": "CRSV",
+      "PartType": "PCV Valve",
+      "PartTypeDescription": "PCV Valve - CV-8808",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 1,
+      "HasImages": true
+    },
+    {
+      "PartId": "NF-46922",
+      "PartNumber": "NF-46922",
+      "Manufacturer": "Northline Filtration",
+      "BrandId": "NORTH",
+      "LineCode": "NORTH",
+      "PartType": "Air Filter",
+      "PartTypeDescription": "Air Filter - NF-46922",
+      "Category": "Ignition & Engine Filters",
+      "Group": "Engine Filters & PCV",
+      "ApplicationCount": 1,
+      "HasImages": true
+    }
+  ]
+}

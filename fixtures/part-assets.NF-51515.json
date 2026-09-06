@@ -1,0 +1,18 @@
+{
+  "Assets": [
+    {
+      "assetId": "NF-51515-IMG-1",
+      "assetType": "P04",
+      "url": "https://placehold.co/1200x1200/1F3A5F/FFFFFF/png?text=NF-51515+view+1",
+      "altText": "Northline Filtration NF-51515 view 1",
+      "sequence": 1
+    },
+    {
+      "assetId": "NF-51515-IMG-2",
+      "assetType": "P01",
+      "url": "https://placehold.co/1200x1200/1F3A5F/FFFFFF/png?text=NF-51515+view+2",
+      "altText": "Northline Filtration NF-51515 view 2",
+      "sequence": 2
+    }
+  ]
+}

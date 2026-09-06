@@ -1,0 +1,45 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "514726",
+      "Year": 2016,
+      "Make": "Ford",
+      "Model": "F-150",
+      "SubModel": "XLT",
+      "EngineBase": "3.5L V6",
+      "Qualifier": null,
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "273826",
+      "Year": 2017,
+      "Make": "Ford",
+      "Model": "F-150",
+      "SubModel": "Lariat",
+      "EngineBase": "5.0L V8",
+      "Qualifier": null,
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "477172",
+      "Year": 2018,
+      "Make": "Ford",
+      "Model": "F-150",
+      "SubModel": "XL",
+      "EngineBase": "2.7L V6",
+      "Qualifier": null,
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "541497",
+      "Year": 2017,
+      "Make": "Ford",
+      "Model": "Expedition",
+      "SubModel": "XLT",
+      "EngineBase": "3.5L V6",
+      "Qualifier": null,
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 4
+}

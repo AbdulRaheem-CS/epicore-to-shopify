@@ -1,0 +1,37 @@
+{
+  "Item": {
+    "PartId": "CV-8808",
+    "PartNumber": "CV-8808",
+    "Manufacturer": "Crossvale Auto",
+    "BrandId": "CRSV",
+    "LineCode": "CRSV",
+    "PartType": "PCV Valve",
+    "PartTypeDescription": "Crossvale Auto PCV Valve CV-8808",
+    "LongDescription": "Heavy-duty PCV valve for turbocharged applications.",
+    "Category": "Ignition & Engine Filters",
+    "Group": "Engine Filters & PCV",
+    "Attributes": [
+      {
+        "Name": "Thread Size",
+        "Value": "N/A"
+      },
+      {
+        "Name": "Height",
+        "Value": "3.40 in"
+      },
+      {
+        "Name": "Outer Diameter",
+        "Value": "2.92 in"
+      },
+      {
+        "Name": "Anti-Drainback Valve",
+        "Value": "No"
+      },
+      {
+        "Name": "Country of Origin",
+        "Value": "US"
+      }
+    ],
+    "UPC": "012089619499"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "Item": {
+    "PartId": "NF-46922",
+    "PartNumber": "NF-46922",
+    "Manufacturer": "Northline Filtration",
+    "BrandId": "NORTH",
+    "LineCode": "NORTH",
+    "PartType": "Air Filter",
+    "PartTypeDescription": "Northline Filtration Air Filter NF-46922",
+    "LongDescription": "High-flow panel air filter, washable cotton-gauze media.",
+    "Category": "Ignition & Engine Filters",
+    "Group": "Engine Filters & PCV",
+    "Attributes": [
+      {
+        "Name": "Thread Size",
+        "Value": "N/A"
+      },
+      {
+        "Name": "Height",
+        "Value": "3.40 in"
+      },
+      {
+        "Name": "Outer Diameter",
+        "Value": "2.92 in"
+      },
+      {
+        "Name": "Anti-Drainback Valve",
+        "Value": "No"
+      },
+      {
+        "Name": "Country of Origin",
+        "Value": "US"
+      }
+    ],
+    "UPC": "021793009299"
+  }
+}

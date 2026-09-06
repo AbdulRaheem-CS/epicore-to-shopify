@@ -1,0 +1,25 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "707977",
+      "Year": 2013,
+      "Make": "Chevrolet",
+      "Model": "Silverado 1500",
+      "SubModel": "LT",
+      "EngineBase": "5.3L V8",
+      "Qualifier": null,
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "330405",
+      "Year": 2014,
+      "Make": "GMC",
+      "Model": "Sierra 1500",
+      "SubModel": "SLE",
+      "EngineBase": "5.3L V8",
+      "Qualifier": null,
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 2
+}

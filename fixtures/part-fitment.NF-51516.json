@@ -1,0 +1,35 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "349616",
+      "Year": 2017,
+      "Make": "Toyota",
+      "Model": "Camry",
+      "SubModel": "LE",
+      "EngineBase": "2.5L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "376389",
+      "Year": 2018,
+      "Make": "Toyota",
+      "Model": "Camry",
+      "SubModel": "SE",
+      "EngineBase": "2.5L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "803317",
+      "Year": 2018,
+      "Make": "Lexus",
+      "Model": "ES350",
+      "SubModel": "Base",
+      "EngineBase": "3.5L V6",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 3
+}

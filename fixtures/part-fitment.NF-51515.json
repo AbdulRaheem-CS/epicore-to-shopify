@@ -1,0 +1,45 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "592417",
+      "Year": 2014,
+      "Make": "Honda",
+      "Model": "Civic",
+      "SubModel": "EX",
+      "EngineBase": "1.8L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "132817",
+      "Year": 2015,
+      "Make": "Honda",
+      "Model": "Civic",
+      "SubModel": "LX",
+      "EngineBase": "1.8L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "981993",
+      "Year": 2016,
+      "Make": "Honda",
+      "Model": "Civic",
+      "SubModel": "EX",
+      "EngineBase": "2.0L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "239851",
+      "Year": 2015,
+      "Make": "Acura",
+      "Model": "ILX",
+      "SubModel": "Base",
+      "EngineBase": "2.0L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 4
+}

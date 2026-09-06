@@ -1,0 +1,14 @@
+# secrets — never commit
+.env
+.env.local
+
+# captured Epicor payloads may contain licensed catalog data
+fixtures/captured/
+
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+npm-debug.log*

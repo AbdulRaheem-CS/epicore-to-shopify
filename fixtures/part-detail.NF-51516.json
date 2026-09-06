@@ -1,0 +1,37 @@
+{
+  "Item": {
+    "PartId": "NF-51516",
+    "PartNumber": "NF-51516",
+    "Manufacturer": "Northline Filtration",
+    "BrandId": "NORTH",
+    "LineCode": "NORTH",
+    "PartType": "Oil Filter",
+    "PartTypeDescription": "Northline Filtration Oil Filter NF-51516",
+    "LongDescription": "Extended-service spin-on oil filter rated to 10,000 miles with synthetic blend media.",
+    "Category": "Ignition & Engine Filters",
+    "Group": "Engine Filters & PCV",
+    "Attributes": [
+      {
+        "Name": "Thread Size",
+        "Value": "3/4-16"
+      },
+      {
+        "Name": "Height",
+        "Value": "3.40 in"
+      },
+      {
+        "Name": "Outer Diameter",
+        "Value": "2.92 in"
+      },
+      {
+        "Name": "Anti-Drainback Valve",
+        "Value": "Yes"
+      },
+      {
+        "Name": "Country of Origin",
+        "Value": "US"
+      }
+    ],
+    "UPC": "037234382153"
+  }
+}

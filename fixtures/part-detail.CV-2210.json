@@ -1,0 +1,37 @@
+{
+  "Item": {
+    "PartId": "CV-2210",
+    "PartNumber": "CV-2210",
+    "Manufacturer": "Crossvale Auto",
+    "BrandId": "CRSV",
+    "LineCode": "CRSV",
+    "PartType": "Oil Filter",
+    "PartTypeDescription": "Crossvale Auto Oil Filter CV-2210",
+    "LongDescription": "Cartridge-style oil filter element supplied with replacement housing O-rings.",
+    "Category": "Ignition & Engine Filters",
+    "Group": "Engine Filters & PCV",
+    "Attributes": [
+      {
+        "Name": "Thread Size",
+        "Value": "3/4-16"
+      },
+      {
+        "Name": "Height",
+        "Value": "3.40 in"
+      },
+      {
+        "Name": "Outer Diameter",
+        "Value": "2.92 in"
+      },
+      {
+        "Name": "Anti-Drainback Valve",
+        "Value": "Yes"
+      },
+      {
+        "Name": "Country of Origin",
+        "Value": "US"
+      }
+    ],
+    "UPC": "059299610274"
+  }
+}

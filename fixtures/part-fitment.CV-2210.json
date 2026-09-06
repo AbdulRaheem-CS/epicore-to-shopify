@@ -1,0 +1,35 @@
+{
+  "Applications": [
+    {
+      "BaseVehicleID": "482264",
+      "Year": 2015,
+      "Make": "Volkswagen",
+      "Model": "Jetta",
+      "SubModel": "S",
+      "EngineBase": "1.8L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "827138",
+      "Year": 2016,
+      "Make": "Volkswagen",
+      "Model": "Golf",
+      "SubModel": "TSI",
+      "EngineBase": "1.8L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    },
+    {
+      "BaseVehicleID": "138320",
+      "Year": 2016,
+      "Make": "Audi",
+      "Model": "A3",
+      "SubModel": "Premium",
+      "EngineBase": "1.8L L4",
+      "Qualifier": "Engine oil filter",
+      "Position": "N/A"
+    }
+  ],
+  "TotalCount": 3
+}
