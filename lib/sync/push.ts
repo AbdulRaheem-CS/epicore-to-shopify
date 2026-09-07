@@ -15,6 +15,8 @@ import {
 } from "@/lib/epicor/mapping";
 import { uploadProductImage } from "@/lib/shopify/media";
 import { findMissingProducts, upsertProduct } from "@/lib/shopify/products";
+import { ensureCollection } from "@/lib/shopify/collections";
+import { env } from "@/lib/env";
 
 export interface PushCounts {
   created: number;
@@ -24,6 +26,8 @@ export interface PushCounts {
   imagesUploaded: number;
   /** Mapped products that had been deleted from Shopify out of band. */
   remapped: number;
+  /** Distinct Shopify collections resolved or created this run. */
+  collections: number;
 }
 
 /**
@@ -39,6 +43,7 @@ export async function push(syncRunId: number): Promise<PushCounts> {
     failed: 0,
     imagesUploaded: 0,
     remapped: 0,
+    collections: 0,
   };
 
   const rows = await db
@@ -87,6 +92,8 @@ export async function push(syncRunId: number): Promise<PushCounts> {
     }
   }
 
+  const seenCollections = new Set<string>();
+
   for (const row of rows) {
     const partKey = buildPartKey(row.aaiaBrandId ?? row.brandName, row.product.partNumber);
     const sku = buildSku(
@@ -118,6 +125,33 @@ export async function push(syncRunId: number): Promise<PushCounts> {
         qualifier: f.qualifier,
       }));
 
+      // Epicor's category and group become like-named Shopify collections.
+      // Resolved per product, but ensureCollection caches per run, so five
+      // products in one category cost one lookup, not five.
+      const collections: string[] = [];
+      if (env.SHOPIFY_COLLECTIONS) {
+        for (const [level, title] of [
+          ["category", row.product.category],
+          ["group", row.product.groupName],
+        ] as const) {
+          if (!title?.trim()) continue;
+          try {
+            const gid = await ensureCollection(title, level);
+            if (!collections.includes(gid)) collections.push(gid);
+            seenCollections.add(gid);
+          } catch (err) {
+            // A collection failure must not lose the product itself.
+            await logEvent(
+              syncRunId,
+              row.product.id,
+              "warning",
+              label,
+              `collection "${title}": ${err instanceof Error ? err.message : String(err)}`,
+            );
+          }
+        }
+      }
+
       const result = await upsertProduct(
         {
           partKey,
@@ -129,6 +163,10 @@ export async function push(syncRunId: number): Promise<PushCounts> {
           ),
           vendor: row.brandName,
           productType: row.product.partType,
+          barcode: row.product.upc,
+          weight: row.product.weight,
+          weightUnit: row.product.weightUnit,
+          collections,
           fitmentJson,
           fitmentSummary: fits
             .map((f) =>
@@ -220,6 +258,7 @@ export async function push(syncRunId: number): Promise<PushCounts> {
     }
   }
 
+  counts.collections = seenCollections.size;
   return counts;
 }
 

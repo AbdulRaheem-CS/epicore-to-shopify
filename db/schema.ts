@@ -1,4 +1,5 @@
 import {
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -59,6 +60,12 @@ export const product = pgTable(
     partType: text("part_type"),
     title: text("title").notNull(),
     description: text("description"),
+    /** UPC/EAN/GTIN. Goes to Shopify's native variant barcode field. */
+    upc: text("upc"),
+    /** Shipping weight as Epicor reports it, in weightUnit. */
+    weight: doublePrecision("weight"),
+    /** KILOGRAMS | GRAMS | POUNDS | OUNCES — Shopify's WeightUnit enum. */
+    weightUnit: text("weight_unit"),
     attributes: jsonb("attributes").$type<Record<string, unknown>>(),
     /** SHA-256 over normalised product + fitment + image checksums. */
     sourceHash: text("source_hash").notNull(),
@@ -130,6 +137,26 @@ export const fitment = pgTable(
  * duplicates; the epicor.part_key metafield is the backup if this table is
  * ever restored from an old snapshot.
  */
+/**
+ * Collections we created in Shopify, keyed by title. Epicor's category and
+ * group become collections of the same name, and this table means a re-run
+ * reuses them instead of querying for or recreating them.
+ */
+export const shopifyCollection = pgTable(
+  "shopify_collection",
+  {
+    id: serial("id").primaryKey(),
+    title: text("title").notNull(),
+    /** "category" or "group" — which level of the Epicor tree this is. */
+    level: text("level").notNull(),
+    shopifyCollectionGid: text("shopify_collection_gid").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [uniqueIndex("shopify_collection_title_uq").on(t.title)],
+);
+
 export const shopifyMap = pgTable("shopify_map", {
   productId: integer("product_id")
     .primaryKey()

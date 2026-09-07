@@ -56,10 +56,15 @@ async function main() {
   }
 
   await db.execute(sql`
-    truncate sync_event, sync_run, shopify_map, fitment, product_image,
-             product, brand, raw_payload restart identity cascade
+    truncate sync_event, sync_run, shopify_map, shopify_collection, fitment,
+             product_image, product, brand, raw_payload restart identity cascade
   `);
-  console.log("  local tables truncated\n");
+  console.log("  local tables truncated");
+  // The collections themselves are left alone on purpose. They are store
+  // furniture rather than pilot-owned records — a merchant may have added
+  // products or built navigation around them, and ensureCollection finds
+  // them again by handle on the next run.
+  console.log("  Shopify collections left in place (reused by handle)\n");
   console.log(
     alsoShopify
       ? "  Pilot reset. Next: npm run sync\n"

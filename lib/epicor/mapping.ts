@@ -11,8 +11,19 @@ export interface NormalisedPart {
   title: string;
   description: string | null;
   partType: string | null;
+  /** UPC/EAN/GTIN → Shopify's native variant barcode. */
+  upc: string | null;
+  /** Shipping weight → Shopify's variant weight. */
+  weight: number | null;
+  weightUnit: WeightUnit | null;
+  /** Epicor's own tree — becomes Shopify collections. */
+  category: string | null;
+  group: string | null;
   attributes: Record<string, unknown>;
 }
+
+/** Shopify's WeightUnit enum. */
+export type WeightUnit = "KILOGRAMS" | "GRAMS" | "POUNDS" | "OUNCES";
 
 export interface NormalisedImage {
   sourceUrl: string;
@@ -165,6 +176,23 @@ export function mapPart(row: Row): NormalisedPart {
   const epicorTitle = str(row, FIELD_CANDIDATES.title);
   const description = str(row, FIELD_CANDIDATES.description);
 
+  // UPC and weight may be flat keys or entries in the Attributes array,
+  // depending on the endpoint, so both places are checked.
+  const upc = normaliseUpc(
+    str(row, FIELD_CANDIDATES.upc) ?? attributeValue(row, FIELD_CANDIDATES.upc),
+  );
+  const rawWeight =
+    str(row, FIELD_CANDIDATES.weight) ??
+    attributeValue(row, FIELD_CANDIDATES.weight);
+  const weight = toNumber(rawWeight);
+  const weightUnit = weight === null
+    ? null
+    : parseWeightUnit(
+        str(row, FIELD_CANDIDATES.weightUnit) ??
+          attributeValue(row, FIELD_CANDIDATES.weightUnit) ??
+          rawWeight,
+      );
+
   return {
     epicorPartId: str(row, FIELD_CANDIDATES.partId),
     partNumber,
@@ -177,10 +205,70 @@ export function mapPart(row: Row): NormalisedPart {
     title: buildTitle({ brandName, partNumber, description, epicorTitle, partType }),
     description,
     partType,
+    upc,
+    weight,
+    weightUnit,
+    category: str(row, FIELD_CANDIDATES.category),
+    group: str(row, FIELD_CANDIDATES.group),
     // Keep everything else. Cheap now, and it means new attributes appearing
     // upstream don't need a schema change.
     attributes: row,
   };
+}
+
+/**
+ * Looks a value up in Epicor's Attributes array (the {Name, Value} pairs)
+ * rather than among the row's own keys. Weight in particular can arrive
+ * either way depending on the endpoint.
+ */
+function attributeValue(row: Row, candidates: readonly string[]): string | null {
+  const lower = new Map(
+    Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]),
+  );
+  const wanted = candidates.map((c) => c.toLowerCase());
+
+  for (const key of SPEC_LIST_KEYS) {
+    const list = lower.get(key);
+    if (!Array.isArray(list)) continue;
+    for (const entry of list) {
+      if (!entry || typeof entry !== "object") continue;
+      const name = str(entry as Row, SPEC_NAME_KEYS);
+      if (!name) continue;
+      const flat = name.toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (!wanted.some((w) => w.replace(/[^a-z0-9]/g, "") === flat)) continue;
+      const value = str(entry as Row, SPEC_VALUE_KEYS);
+      if (value) return value;
+    }
+  }
+  return null;
+}
+
+/** Digits only. Shopify's barcode field is free text, but a UPC is not. */
+function normaliseUpc(value: string | null): string | null {
+  if (!value) return null;
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 8 && digits.length <= 14 ? digits : null;
+}
+
+function toNumber(value: string | null): number | null {
+  if (!value) return null;
+  const parsed = Number(value.replace(/[^0-9.]/g, ""));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+/**
+ * Epicor may name the unit separately, embed it in the value ("3.4 lb"), or
+ * omit it. When it is absent the caller's configured default applies, since
+ * guessing between pounds and kilograms would silently mis-state shipping.
+ */
+export function parseWeightUnit(value: string | null): WeightUnit | null {
+  if (!value) return null;
+  const v = value.toLowerCase();
+  if (/\b(kg|kilogram)/.test(v)) return "KILOGRAMS";
+  if (/\b(lb|lbs|pound)/.test(v)) return "POUNDS";
+  if (/\b(oz|ounce)/.test(v)) return "OUNCES";
+  if (/\b(g|gram)\b/.test(v)) return "GRAMS";
+  return null;
 }
 
 /** Shopify rejects titles over 255 characters. */

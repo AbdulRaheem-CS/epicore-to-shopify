@@ -19,6 +19,13 @@ export interface ProductUpsertInput {
   descriptionHtml: string | null;
   vendor: string;
   productType: string | null;
+  /** UPC → Shopify's native variant barcode field. */
+  barcode: string | null;
+  /** Shipping weight → the variant's inventory item measurement. */
+  weight: number | null;
+  weightUnit: string | null;
+  /** Collection GIDs this product belongs to. */
+  collections: string[];
   fitmentJson: unknown;
   fitmentSummary: string;
 }
@@ -147,13 +154,15 @@ export async function upsertProduct(
     productOptions: [
       { name: "Title", values: [{ name: "Default Title" }] },
     ],
-    variants: [
-      {
-        sku: input.sku,
-        optionValues: [{ optionName: "Title", name: "Default Title" }],
-      },
-    ],
+    variants: [buildVariant(input)],
   };
+
+  // productSet replaces the collection set it is given, so only send the key
+  // when we actually resolved collections — otherwise a run with collections
+  // disabled would strip a product out of every collection it is in.
+  if (input.collections.length) {
+    productInput.collections = input.collections;
+  }
 
   const metafields = fitmentMetafields(input);
 
@@ -227,6 +236,33 @@ async function runProductSet(
     await setProductMetafields(product.id, input);
     return product;
   }
+}
+
+/**
+ * barcode and weight are only sent when Epicor actually supplied them.
+ * Writing `null` would clear a value a merchant had set by hand, and writing
+ * a zero weight is worse than writing none at all.
+ */
+function buildVariant(input: ProductUpsertInput): Record<string, unknown> {
+  const variant: Record<string, unknown> = {
+    sku: input.sku,
+    optionValues: [{ optionName: "Title", name: "Default Title" }],
+  };
+
+  if (input.barcode) variant.barcode = input.barcode;
+
+  if (input.weight !== null && input.weight > 0) {
+    variant.inventoryItem = {
+      measurement: {
+        weight: {
+          value: input.weight,
+          unit: input.weightUnit ?? "POUNDS",
+        },
+      },
+    };
+  }
+
+  return variant;
 }
 
 /**

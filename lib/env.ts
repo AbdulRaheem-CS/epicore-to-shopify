@@ -35,6 +35,19 @@ export const env = {
   PILOT_PART_TYPE: optional("PILOT_PART_TYPE", "Oil Filter"),
   PILOT_BRAND: optional("PILOT_BRAND"),
   PILOT_PART_LIMIT: Number(optional("PILOT_PART_LIMIT", "5")),
+
+  /**
+   * Unit to assume when Epicor gives a weight with no unit. Guessing between
+   * pounds and kilograms would silently mis-state shipping, so it is explicit.
+   */
+  EPICOR_WEIGHT_UNIT: optional("EPICOR_WEIGHT_UNIT", "POUNDS") as
+    | "KILOGRAMS"
+    | "GRAMS"
+    | "POUNDS"
+    | "OUNCES",
+
+  /** Create Shopify collections from Epicor's category / group names. */
+  SHOPIFY_COLLECTIONS: optional("SHOPIFY_COLLECTIONS", "true") !== "false",
 };
 
 /** Metafields the pilot writes. part_key MUST have unique values enabled. */

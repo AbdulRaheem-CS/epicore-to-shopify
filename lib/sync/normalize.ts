@@ -92,6 +92,18 @@ export async function normalize(syncRunId: number): Promise<NormalizeCounts> {
       title: buildTitle(merged),
     };
     const specs = specRows(detail.attributes);
+    // Epicor may report a weight with no unit; fall back to the configured one
+    // rather than guessing between pounds and kilograms.
+    const weightUnit =
+      detail.weight === null
+        ? null
+        : (detail.weightUnit ?? env.EPICOR_WEIGHT_UNIT);
+    // Category and group fall back to the configured pilot scope, since the
+    // summary endpoint carries them but the detail payload may not.
+    const collectionTitles = [
+      detail.category ?? env.PILOT_CATEGORY,
+      detail.group ?? env.PILOT_GROUP,
+    ].filter((t): t is string => Boolean(t && t.trim()));
 
     const images = mapImages(assetsByPart.get(partKeyId) ?? detailBody ?? []);
     const fits = mapFitment(fitmentByPart.get(partKeyId) ?? []);
@@ -108,6 +120,10 @@ export async function normalize(syncRunId: number): Promise<NormalizeCounts> {
       title: detail.title,
       description: detail.description,
       partType: detail.partType,
+      upc: detail.upc,
+      weight: detail.weight,
+      weightUnit: weightUnit,
+      collections: collectionTitles,
       // Specs are rendered into descriptionHtml, so they have to gate the
       // push too — otherwise an attribute change never reaches Shopify.
       specs: specs.map((sp) => `${sp.name}=${sp.value}`),
@@ -121,11 +137,14 @@ export async function normalize(syncRunId: number): Promise<NormalizeCounts> {
         brandId: brandRow.id,
         partNumber: detail.partNumber,
         epicorProductId: detail.epicorPartId,
-        category: env.PILOT_CATEGORY,
-        groupName: env.PILOT_GROUP,
+        category: detail.category ?? env.PILOT_CATEGORY,
+        groupName: detail.group ?? env.PILOT_GROUP,
         partType: detail.partType,
         title: detail.title,
         description: detail.description,
+        upc: detail.upc,
+        weight: detail.weight,
+        weightUnit,
         attributes: detail.attributes,
         sourceHash,
       })
@@ -134,6 +153,11 @@ export async function normalize(syncRunId: number): Promise<NormalizeCounts> {
         set: {
           title: detail.title,
           description: detail.description,
+          upc: detail.upc,
+          weight: detail.weight,
+          weightUnit,
+          category: detail.category ?? env.PILOT_CATEGORY,
+          groupName: detail.group ?? env.PILOT_GROUP,
           partType: detail.partType,
           attributes: detail.attributes,
           epicorProductId: detail.epicorPartId,
