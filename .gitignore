@@ -5,6 +5,12 @@
 # captured Epicor payloads may contain licensed catalog data
 fixtures/captured/
 
+# readme / internal docs — kept local, not pushed
+README.md
+readme.md
+Readme.md
+chatwithclient.md
+
 node_modules/
 .next/
 out/
