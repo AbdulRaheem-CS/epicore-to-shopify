@@ -13,7 +13,7 @@ import {
   describeFitment,
   specRows,
 } from "@/lib/epicor/mapping";
-import { uploadProductImage } from "@/lib/shopify/media";
+import { listProductMedia, uploadProductImage } from "@/lib/shopify/media";
 import { findMissingProducts, upsertProduct } from "@/lib/shopify/products";
 import { ensureCollection } from "@/lib/shopify/collections";
 import { env } from "@/lib/env";
@@ -215,7 +215,68 @@ export async function push(syncRunId: number): Promise<PushCounts> {
         .where(eq(productImage.productId, row.product.id))
         .orderBy(productImage.position);
 
-      for (const image of pendingImages.filter((i) => !i.shopifyMediaId)) {
+      let unuploaded = pendingImages.filter((i) => !i.shopifyMediaId);
+
+      // A null media id means "we have not uploaded this" — but that is local
+      // state, and local state can be wrong about Shopify. On a fresh database
+      // (a new server, a restored backup) every id is null while the product
+      // already has its images, and uploading again gives it two copies of
+      // each. So ask Shopify what is actually there and adopt it first.
+      if (unuploaded.length) {
+        try {
+          const existing = await listProductMedia(result.productGid);
+          if (existing.length) {
+            const byAlt = new Map(
+              existing.filter((m) => m.alt).map((m) => [m.alt as string, m.id]),
+            );
+            const claimed = new Set<string>();
+
+            for (const image of unuploaded) {
+              // Alt text first — it is per-image and stable. Position is the
+              // fallback for images Epicor gave no alt text for.
+              const wantedAlt = image.altText ?? row.product.title;
+              const match =
+                byAlt.get(wantedAlt) ??
+                existing[image.position]?.id ??
+                undefined;
+              if (!match || claimed.has(match)) continue;
+              claimed.add(match);
+              await db
+                .update(productImage)
+                .set({ shopifyMediaId: match, uploadedAt: new Date() })
+                .where(eq(productImage.id, image.id));
+              image.shopifyMediaId = match;
+            }
+
+            const adopted = claimed.size;
+            if (adopted) {
+              await logEvent(
+                syncRunId,
+                row.product.id,
+                "adopted",
+                label,
+                `${adopted} existing image(s) already in Shopify — not re-uploaded`,
+              );
+            }
+            unuploaded = unuploaded.filter((i) => !i.shopifyMediaId);
+          }
+        } catch (err) {
+          // If we cannot tell what is there, upload nothing rather than risk
+          // duplicating. The next run retries.
+          await logEvent(
+            syncRunId,
+            row.product.id,
+            "warning",
+            label,
+            `could not read existing media, skipping image upload: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+          unuploaded = [];
+        }
+      }
+
+      for (const image of unuploaded) {
         try {
           const mediaId = await uploadProductImage(result.productGid, {
             sourceUrl: image.sourceUrl,

@@ -39,9 +39,12 @@ const CREATE_MEDIA = /* GraphQL */ `
 const PRODUCT_MEDIA_COUNT = /* GraphQL */ `
   query MediaCount($id: ID!) {
     product(id: $id) {
-      media(first: 50) {
+      media(first: 250) {
         nodes {
           id
+          ... on MediaImage {
+            alt
+          }
         }
       }
     }
@@ -143,11 +146,36 @@ export async function uploadProductImage(
   return mediaId;
 }
 
-export async function countProductMedia(productGid: string): Promise<number> {
+export interface ExistingMedia {
+  id: string;
+  alt: string | null;
+}
+
+/**
+ * The media a product already carries, in Shopify's own order.
+ *
+ * Needed because product_image.shopify_media_id is local state, and local
+ * state can be wrong about Shopify: deploy to a fresh server and every id is
+ * null, so every image looks unuploaded and the product ends up with two
+ * copies of each. Shopify re-hosts uploads under its own CDN URLs, so the
+ * source URL cannot be compared — position and alt text are what we have.
+ */
+export async function listProductMedia(
+  productGid: string,
+): Promise<ExistingMedia[]> {
   const data = await shopifyGraphQL<{
-    product: { media: { nodes: Array<{ id: string }> } } | null;
+    product: {
+      media: { nodes: Array<{ id: string; alt?: string | null }> };
+    } | null;
   }>(PRODUCT_MEDIA_COUNT, { id: productGid });
-  return data.product?.media.nodes.length ?? 0;
+  return (data.product?.media.nodes ?? []).map((n) => ({
+    id: n.id,
+    alt: n.alt ?? null,
+  }));
+}
+
+export async function countProductMedia(productGid: string): Promise<number> {
+  return (await listProductMedia(productGid)).length;
 }
 
 function filenameFor(url: string): string {
