@@ -34,7 +34,7 @@ export const env = {
   PILOT_GROUP: optional("PILOT_GROUP", "Engine Filters & PCV"),
   PILOT_PART_TYPE: optional("PILOT_PART_TYPE", "Oil Filter"),
   PILOT_BRAND: optional("PILOT_BRAND"),
-  PILOT_PART_LIMIT: Number(optional("PILOT_PART_LIMIT", "5")),
+  PILOT_PART_LIMIT: Number(optional("PILOT_PART_LIMIT", "10")),
 
   /**
    * Unit to assume when Epicor gives a weight with no unit. Guessing between
