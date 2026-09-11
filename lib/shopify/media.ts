@@ -80,8 +80,12 @@ export async function uploadProductImage(
     );
   }
   const bytes = Buffer.from(await res.arrayBuffer());
-  const mimeType = res.headers.get("content-type") ?? guessMime(image.sourceUrl);
-  const filename = filenameFor(image.sourceUrl);
+  // Strip any "; charset=..." — Shopify wants a bare mime type.
+  const mimeType = (
+    res.headers.get("content-type")?.split(";")[0].trim() ||
+    guessMime(image.sourceUrl)
+  ).toLowerCase();
+  const filename = filenameFor(image.sourceUrl, image.altText, mimeType);
 
   const staged = await shopifyGraphQL<{
     stagedUploadsCreate: {
@@ -178,9 +182,47 @@ export async function countProductMedia(productGid: string): Promise<number> {
   return (await listProductMedia(productGid)).length;
 }
 
-function filenameFor(url: string): string {
-  const base = url.split("?")[0].split("/").pop() ?? "image";
-  return /\.(jpe?g|png|webp|gif)$/i.test(base) ? base : `${base}.jpg`;
+/**
+ * A readable filename for the Shopify media library.
+ *
+ * Taking the last path segment alone gives nonsense for URLs that carry the
+ * format as a bare segment or only in the query string — a real fixture URL
+ * ending "/png?text=..." produced a file literally called "png". The alt text
+ * is the better name when the URL has nothing usable in it.
+ */
+export function filenameFor(
+  url: string,
+  altText?: string | null,
+  mimeType?: string,
+): string {
+  const base = url.split("?")[0].split("/").pop() ?? "";
+  const ext = base.match(/\.(jpe?g|png|webp|gif)$/i)?.[0].toLowerCase();
+
+  // A path segment that already looks like a filename is the best answer.
+  if (ext && base.length > ext.length) return base;
+
+  // The response's content-type is authoritative; the URL is only a guess,
+  // and a URL ending "/png?text=..." is not even a reliable guess.
+  const extension = mimeType
+    ? `.${extensionForMime(mimeType)}`
+    : (ext ?? `.${extensionFor(url)}`);
+  const slug = (altText ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+
+  return slug ? `${slug}${extension}` : `image${extension}`;
+}
+
+function extensionFor(url: string): string {
+  return extensionForMime(guessMime(url));
+}
+
+function extensionForMime(mime: string): string {
+  if (mime === "image/jpeg" || mime === "image/jpg") return "jpg";
+  const sub = mime.split("/")[1];
+  return /^(png|webp|gif|avif)$/.test(sub ?? "") ? sub : "jpg";
 }
 
 function guessMime(url: string): string {
